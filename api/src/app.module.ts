@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CoreMongoModule } from './databases/mongodb/mongo.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule, ProductModule } from './frameworks';
-import { CategoryModule } from './frameworks/category/category.module';
+import { UserModule, ProductModule, CategoryModule, AuthModule } from './frameworks';
 
 
 @Module({
@@ -11,9 +10,10 @@ import { CategoryModule } from './frameworks/category/category.module';
     CoreMongoModule,
     UserModule,
     ProductModule,
-    CategoryModule
+    CategoryModule,
+    AuthModule
   ],
   controllers: [],
   providers: [ConfigService],
 })
-export class AppModule {}
+export class AppModule { }

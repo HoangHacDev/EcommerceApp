@@ -3,6 +3,7 @@ import { Product, ProductDocument } from "./model/product.model";
 import { GenericRepository, IGenericRepository } from "src/interfaces";
 import { Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
+import { Category, CategoryDocument } from '../category/model/category.model';
 import { ProductFactoryService } from "./factory/productFactory.service";
 import { CreateProductDto, ReadProductDto, UpdateProductDto } from "./dto/productDTO.dto";
 
@@ -15,6 +16,7 @@ export class ProductService {
     constructor(
         // * Call Model with decorator @InjectModel
         @InjectModel(Product.name) private readonly productModel: Model<ProductDocument>,
+        @InjectModel(Category.name) private readonly categoryModel: Model<CategoryDocument>,
         // * Inject userFactory
         private _productFactoryService: ProductFactoryService) {
         // * initial User base Repository
@@ -24,6 +26,15 @@ export class ProductService {
     create(productDTO: CreateProductDto): Promise<ReadProductDto> {
         const product = this._productFactoryService.addProduct(productDTO);
         return this._productRepository.add(product);
+    }
+
+    addToCategory(cate_id : string, product : Product){
+        const update = this.categoryModel.findByIdAndUpdate(cate_id, {
+            $push:{
+                products: product
+            }
+        });
+        return update;
     }
 
     findAll(): Promise<ReadProductDto[]> {

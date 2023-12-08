@@ -9,26 +9,26 @@ export class CategoryController {
     constructor(private readonly _categoryService: CategoryService) { }
 
     @Post()
-    @ResponseMessage('Product Create Succesfully')
+    @ResponseMessage('TypeProduct Create Succesfully')
     create(@Body() category: Category): Promise<Category> {
         // console.log(category);
         return this._categoryService.create(category);
     }
 
     @Get()
-    @ResponseMessage('Products fetched Succesfully')
+    @ResponseMessage('TypeProducts fetched Succesfully')
     findAll(): Promise<Category[]> {
         return this._categoryService.findAll();
     }
 
     @Get(':id')
-    @ResponseMessage('Product fetched Succesfully')
+    @ResponseMessage('TypeProduct fetched Succesfully')
     findOne(@Param('id') type_id: string): Promise<Category> {
         return this._categoryService.findOne(type_id);
     }
 
     @Patch(':id')
-    // @ResponseMessage('Update Product Succesfully')
+    // @ResponseMessage('Update TypeProduct Succesfully')
     update(@Param('id') type_id: string, @Body() category: Category): Promise<any> {
         return this._categoryService.update(type_id, category);
     }

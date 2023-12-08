@@ -4,3 +4,5 @@
 # npm i --save @nestjs/swagger
 # npm i bcrypt
 # npm i -D @types/bcrypt
+# npm i @nestjs/passport passport passport-jwt
+# npm i --save @types/passport-jwt

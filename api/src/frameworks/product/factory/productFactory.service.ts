@@ -8,7 +8,7 @@ export class ProductFactoryService {
         const product = new ProductEntity();
         product.name = productDTO.name;
         product.desc = productDTO.desc;
-        product.type_id = productDTO.type_id;
+        product.category = productDTO.category;
         product.title = "";
         product.size = "";
         product.price = 0;
@@ -21,7 +21,7 @@ export class ProductFactoryService {
         const product = new ProductEntity();
         product.name = productDTO.name;
         product.desc = productDTO.desc;
-        product.type_id = productDTO.type_id;
+        product.category = productDTO.category;
         product.title = "";
         product.size = "";
         product.price = 0;

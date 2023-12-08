@@ -1,19 +1,24 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
 import { ProductService } from "./product.service";
 import { CreateProductDto, ReadProductDto, UpdateProductDto } from './dto/productDTO.dto';
-import { ResponseMessage, TransformationInterceptor } from 'src/middlewares';
+import { ObjectIdNotFoundException, ObjectIdValidException, ResponseMessage, TransformationInterceptor } from 'src/middlewares';
+import { Types } from 'mongoose';
+import { Product } from './model/product.model';
 
 
 @UseInterceptors(TransformationInterceptor)
 @Controller('api/product')
 export class ProductController {
-    constructor(private readonly _productService: ProductService) { }
+    constructor(
+        private readonly _productService: ProductService,
+    ) { }
 
-    @Post()
+    @Post(':id')
     @ResponseMessage('Product Create Succesfully')
-    create(@Body() productDTO: CreateProductDto): Promise<ReadProductDto> {
-        console.log(productDTO);
-        return this._productService.create(productDTO);
+    async create(@Param('id') categoryId: string, @Body() productDTO: CreateProductDto): Promise<Product> {
+        const product = await this._productService.create(productDTO);
+        await this._productService.addToCategory(categoryId, product);
+        return product;
     }
 
     @Get()
@@ -24,19 +29,47 @@ export class ProductController {
 
     @Get(':id')
     @ResponseMessage('Product fetched Succesfully')
-    findOne(@Param('id') productId: string): Promise<ReadProductDto> {
-        return this._productService.findOne(productId);
+    async findOne(@Param('id') productId: string): Promise<ReadProductDto> {
+        if (Types.ObjectId.isValid(productId)) {
+            const user = await this._productService.findOne(productId);
+            if (user) {
+                return this._productService.findOne(productId);
+            }
+            else {
+                throw new ObjectIdNotFoundException(productId);
+            }
+        }
+        throw new ObjectIdValidException(productId);
     }
 
     @Patch(':id')
-    // @ResponseMessage('Update Product Succesfully')
-    update(@Param('id') productId: string, @Body() productDTO: UpdateProductDto): Promise<any> {
-        return this._productService.update(productId, productDTO);
+    @ResponseMessage('Update Product Succesfully')
+    async update(@Param('id') productId: string, @Body() productDTO: UpdateProductDto): Promise<any> {
+        if (Types.ObjectId.isValid(productId)) {
+            const user = await this._productService.findOne(productId);
+            if (user) {
+                return this._productService.update(productId, productDTO);
+
+            }
+            else {
+                throw new ObjectIdNotFoundException(productId);
+            }
+        }
+        throw new ObjectIdValidException(productId);
     }
 
     @Delete(':id')
-    // @ResponseMessage('Delete User Succesfully')
-    remove(@Param('id') productId: string): Promise<any> {
-        return this._productService.remove(productId);
+    @ResponseMessage('Delete Product Succesfully')
+    async remove(@Param('id') productId: string): Promise<any> {
+        if (Types.ObjectId.isValid(productId)) {
+            const user = await this._productService.findOne(productId);
+            if (user) {
+                return this._productService.remove(productId);
+            }
+            else {
+                throw new ObjectIdNotFoundException(productId);
+            }
+        }
+        throw new ObjectIdValidException(productId);
     }
 }

@@ -1,3 +1,5 @@
+import { Category } from "src/frameworks";
+
 export class ProductEntity {
     name: string;
 
@@ -11,5 +13,5 @@ export class ProductEntity {
 
     quantity : number;
 
-    type_id: string;
+    category : Category;
 }

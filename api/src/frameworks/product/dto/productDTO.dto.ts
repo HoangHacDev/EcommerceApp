@@ -1,5 +1,6 @@
 import { PartialType } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { Category } from 'src/frameworks';
 
 export class ReadProductDto {
     name: string;
@@ -14,7 +15,7 @@ export class ReadProductDto {
 
     quantity : number;
 
-    type_id: string;
+    category : Category;
 }
 
 export class CreateProductDto extends PartialType(ReadProductDto) {
@@ -25,7 +26,7 @@ export class CreateProductDto extends PartialType(ReadProductDto) {
     desc: string;
 
     @IsNotEmpty()
-    type_id: string;
+    category : Category;
 }
 
 export class UpdateProductDto extends PartialType(ReadProductDto) {

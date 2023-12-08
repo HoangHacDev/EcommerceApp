@@ -4,6 +4,7 @@ import { Product, ProductSchema } from "./model/product.model";
 import { ProductController } from "./product.controller";
 import { ProductService } from "./product.service";
 import { ProductFactoryService } from "./factory/productFactory.service";
+import { Category, CategorySchema } from "../category/model/category.model";
 
 
 @Module({
@@ -11,6 +12,9 @@ import { ProductFactoryService } from "./factory/productFactory.service";
       MongooseModule.forFeature([
         {
           name: Product.name, schema: ProductSchema
+        },
+        {
+          name: Category.name, schema: CategorySchema
         }
       ])
     ],

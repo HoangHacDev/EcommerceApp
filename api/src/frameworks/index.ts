@@ -7,18 +7,28 @@ export * from './user/entities/user.entity';
 export * from './user/model/user.model';
 
 //PRODUCT
-// export * from './product/product.controller';
+export * from './product/product.controller';
 export * from './product/product.module';
 export * from './product/product.service';
 export * from './product/model/product.model';
+export * from './product/entity/productEntity.entity';
 export * from './product/dto/productDTO.dto';
-// export * from './product/product.controller';
 
 //TYPE PRODUCT
-// export * from './category/category.controller';
-// export * from './category/category.module';
-// export * from './category/category.service';
+export * from './category/category.controller';
+export * from './category/category.module';
+export * from './category/category.service';
 export * from './category/model/category.model';
 
-//Role enum
+
+//AUTH  
+export * from './auth/auth.controller';
+export * from './auth/auth.module';
+export * from './auth/auth.service';
+export * from './auth/decorators/roles.decorator';
+export * from './auth/dto/login.dto';
+export * from './auth/entity/auth.entity';
 export * from './auth/enum/role.enum';
+export * from './auth/guard/jwt-auth.guard';
+export * from './auth/guard/jwt.strategy';
+export * from './auth/guard/roles.guard';
