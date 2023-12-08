@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { UserEntity } from '../entities/user.entity';
 import { CreateUserDto, ReadUserDto, UpdateUserDto } from '../dto/UserDTO';
+import { Role } from 'src/frameworks/auth/enum/role.enum';
 
 @Injectable()
 export class UserFactoryService {
@@ -15,6 +16,7 @@ export class UserFactoryService {
     user.email = "";
     user.phone = "";
     user.address = "";
+    user.roles = [Role.USER]; 
 
     return user;
   }

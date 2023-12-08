@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserFactoryService } from './factory/userFactory.service';
 import { CreateUserDto, ReadUserDto, UpdateUserDto } from './dto/UserDTO';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -21,8 +22,9 @@ export class UserService {
     this._userRepository = new GenericRepository<User>(userModel);
   }
 
-  create(userDTO : CreateUserDto) : Promise<ReadUserDto>{
+  async create(userDTO : CreateUserDto) : Promise<ReadUserDto>{
     const user = this._userFactoryService.addUser(userDTO);
+    user.password = await bcrypt.hash(user.password, 10);
     return this._userRepository.add(user);
   }
 
@@ -34,12 +36,12 @@ export class UserService {
     return this._userRepository.get(userId);
   }
 
-  update(userId: string, userDTO : UpdateUserDto) : Promise<ReadUserDto>{
+  update(userId: string, userDTO : UpdateUserDto) : Promise<any>{
     const user = this._userFactoryService.updateUser(userDTO);
     return this._userRepository.update(userId, user);
   }
 
-  remove(userId: string) {
+  remove(userId: string) : Promise<any>{
     return this._userRepository.delete(userId);
   }
 }

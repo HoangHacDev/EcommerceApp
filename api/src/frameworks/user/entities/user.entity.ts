@@ -1,3 +1,5 @@
+import { Role } from "src/frameworks/auth/enum/role.enum";
+
 export class UserEntity {
     username : string;
 
@@ -12,4 +14,6 @@ export class UserEntity {
     phone : string;
   
     address : string;
+
+    roles: Role[];
 }

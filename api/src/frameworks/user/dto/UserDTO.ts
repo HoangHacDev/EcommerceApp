@@ -1,9 +1,10 @@
 import { PartialType } from '@nestjs/swagger';
+import { IsNotEmpty } from 'class-validator';
 
 export class ReadUserDto {
     username: string;
 
-    // password: string;
+    password: string;
 
     firstname: string;
 
@@ -14,11 +15,15 @@ export class ReadUserDto {
     phone: string;
 
     address: string;
+
+    roles : string[];
 }
 
 export class CreateUserDto extends PartialType(ReadUserDto) {
+    @IsNotEmpty()
     username: string;
     
+    @IsNotEmpty()
     password: string;
 }
 
