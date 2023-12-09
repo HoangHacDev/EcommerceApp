@@ -19,7 +19,7 @@ export class AuthService {
 
     async login(email: string, password: string): Promise<AuthEntity> {
         // Step 1: Fetch a user with the given email
-        const user = await this.userModel.findOne({ where: { email: email } });
+        const user = await this.userModel.findOne({ email: email });
 
         // If no user is found, throw an error
         if (!user) {

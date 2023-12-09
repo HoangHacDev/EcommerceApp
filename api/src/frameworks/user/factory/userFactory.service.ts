@@ -13,7 +13,7 @@ export class UserFactoryService {
     user.password = userDTO.password;
     user.firstname = "";
     user.lastname = "";
-    user.email = "";
+    user.email = userDTO.email;
     user.phone = "";
     user.address = "";
     user.roles = [Role.USER]; 
