@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { CoreMongoModule } from './databases/mongodb/mongo.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule, ProductModule, CategoryModule, AuthModule } from './frameworks';
+import { CartModule } from './frameworks/cart/cart.module';
 
 
 @Module({
@@ -11,7 +12,8 @@ import { UserModule, ProductModule, CategoryModule, AuthModule } from './framewo
     UserModule,
     ProductModule,
     CategoryModule,
-    AuthModule
+    AuthModule,
+    CartModule
   ],
   controllers: [],
   providers: [ConfigService],

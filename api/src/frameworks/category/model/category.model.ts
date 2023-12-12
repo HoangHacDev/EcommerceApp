@@ -6,17 +6,14 @@ export type CategoryDocument = Category & Document;
 
 @Schema({ timestamps: true })
 export class Category {
-    @Prop()
+    @Prop({required: true})
     name: string;
 
-    @Prop()
+    @Prop({required: true})
     desc: string;
 
-    @Prop()
-    quantity: string;
-
     // inside the class definition
-    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] })
+    @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }] },)
     products: Product[];
 }
 

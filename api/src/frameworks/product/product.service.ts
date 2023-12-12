@@ -37,8 +37,12 @@ export class ProductService {
         return update;
     }
 
+    findCatgory(cate_id : string) : Promise<any>{
+        return this.categoryModel.findById(cate_id);
+    }
+
     findAll(): Promise<ReadProductDto[]> {
-        return this._productRepository.getAll();
+        return this.productModel.find().populate('category');
     }
 
     findOne(productId: string): Promise<ReadProductDto> {

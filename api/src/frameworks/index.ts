@@ -6,6 +6,10 @@ export * from './user/dto/UserDTO';
 export * from './user/entities/user.entity';
 export * from './user/model/user.model';
 
+//Address
+export * from './user/model/address.model';
+export * from './user/dto/AddressDTO';
+
 //PRODUCT
 export * from './product/product.controller';
 export * from './product/product.module';
@@ -19,7 +23,12 @@ export * from './category/category.controller';
 export * from './category/category.module';
 export * from './category/category.service';
 export * from './category/model/category.model';
+export * from './category/dto/categoryDTO.dto';
 
+//CART
+export * from './cart/model/cart.model';
+export * from './cart/model/item.model';
+//ORDER
 
 //AUTH  
 export * from './auth/auth.controller';

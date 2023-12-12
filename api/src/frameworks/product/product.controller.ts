@@ -4,11 +4,13 @@ import { CreateProductDto, ReadProductDto, UpdateProductDto } from './dto/produc
 import { ObjectIdNotFoundException, ObjectIdValidException, ResponseMessage, TransformationInterceptor } from 'src/middlewares';
 import { Types } from 'mongoose';
 import { Product } from './model/product.model';
-import { Role } from '../auth/enum/role.enum';
-import { Roles } from '../auth/decorators/roles.decorator';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
-import { RolesGuard } from '../auth/guard/roles.guard';
+import { listeners } from 'process';
+import { ValueMessage } from 'src/enum/value.enum';
+// import { Role } from '../auth/enum/role.enum';
+// import { Roles } from '../auth/decorators/roles.decorator';
+// import { ApiBearerAuth } from '@nestjs/swagger';
+// import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
+// import { RolesGuard } from '../auth/guard/roles.guard';
 
 
 @UseInterceptors(TransformationInterceptor)
@@ -21,15 +23,25 @@ export class ProductController {
     @Post(':id')
     @ResponseMessage('Product Create Succesfully')
     async create(@Param('id') categoryId: string, @Body() productDTO: CreateProductDto): Promise<Product> {
-        const product = await this._productService.create(productDTO);
-        await this._productService.addToCategory(categoryId, product);
-        return product;
+      
+        if (Types.ObjectId.isValid(categoryId)) {
+            let category = await this._productService.findCatgory(categoryId);
+            if (category) {
+                let product = await this._productService.create(productDTO);
+                await this._productService.addToCategory(categoryId, product);
+                return product;
+            }
+            else {
+                throw new ObjectIdNotFoundException(categoryId, ValueMessage.CATEGORY);
+            }
+        }
+        throw new ObjectIdValidException(categoryId, ValueMessage.CATEGORY);
     }
 
     @Get()
-    @Roles(Role.ADMIN)
-    @UseGuards(JwtAuthGuard, RolesGuard)
-    @ApiBearerAuth()
+    // @Roles(Role.ADMIN)
+    // @UseGuards(JwtAuthGuard, RolesGuard)
+    // @ApiBearerAuth()
     @ResponseMessage('Products fetched Succesfully')
     findAll(): Promise<ReadProductDto[]> {
         return this._productService.findAll();
@@ -39,45 +51,45 @@ export class ProductController {
     @ResponseMessage('Product fetched Succesfully')
     async findOne(@Param('id') productId: string): Promise<ReadProductDto> {
         if (Types.ObjectId.isValid(productId)) {
-            const user = await this._productService.findOne(productId);
-            if (user) {
-                return this._productService.findOne(productId);
+            let product = await this._productService.findOne(productId);
+            if (product) {
+                return product;
             }
             else {
-                throw new ObjectIdNotFoundException(productId);
+                throw new ObjectIdNotFoundException(productId , ValueMessage.PRODUCT);
             }
         }
-        throw new ObjectIdValidException(productId);
+        throw new ObjectIdValidException(productId, ValueMessage.PRODUCT);
     }
 
     @Patch(':id')
     @ResponseMessage('Update Product Succesfully')
     async update(@Param('id') productId: string, @Body() productDTO: UpdateProductDto): Promise<any> {
         if (Types.ObjectId.isValid(productId)) {
-            const user = await this._productService.findOne(productId);
-            if (user) {
+            let product = await this._productService.findOne(productId);
+            if (product) {
                 return this._productService.update(productId, productDTO);
 
             }
             else {
-                throw new ObjectIdNotFoundException(productId);
+                throw new ObjectIdNotFoundException(productId, ValueMessage.PRODUCT);
             }
         }
-        throw new ObjectIdValidException(productId);
+        throw new ObjectIdValidException(productId, ValueMessage.PRODUCT);
     }
 
     @Delete(':id')
     @ResponseMessage('Delete Product Succesfully')
     async remove(@Param('id') productId: string): Promise<any> {
         if (Types.ObjectId.isValid(productId)) {
-            const user = await this._productService.findOne(productId);
+            let user = await this._productService.findOne(productId);
             if (user) {
                 return this._productService.remove(productId);
             }
             else {
-                throw new ObjectIdNotFoundException(productId);
+                throw new ObjectIdNotFoundException(productId, ValueMessage.PRODUCT);
             }
         }
-        throw new ObjectIdValidException(productId);
+        throw new ObjectIdValidException(productId, ValueMessage.PRODUCT);
     }
 }

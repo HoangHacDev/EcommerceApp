@@ -3,6 +3,7 @@ import { GenericRepository, IGenericRepository } from "src/interfaces";
 import { Category, CategoryDocument } from "./model/category.model";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
+import { CategoryDTO } from "./dto/categoryDTO.dto";
 
 @Injectable()
 export class CategoryService{
@@ -14,12 +15,12 @@ export class CategoryService{
         this._categoryRepository = new GenericRepository<Category>(categoryModel);
     }
 
-    create(category: Category): Promise<Category> {
+    create(category: CategoryDTO): Promise<Category> {
         return this._categoryRepository.add(category);
     }
 
     findAll(): Promise<Category[]> {
-        return this._categoryRepository.getAll();
+        return this.categoryModel.find().populate('products');
     }
 
     findOne(type_id: string): Promise<Category> {

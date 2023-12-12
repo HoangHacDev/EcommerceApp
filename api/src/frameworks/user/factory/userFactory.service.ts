@@ -15,7 +15,8 @@ export class UserFactoryService {
     user.lastname = "";
     user.email = userDTO.email;
     user.phone = "";
-    user.address = "";
+    user.addresses = userDTO.addresses;
+    user.accessToken = "";
     user.roles = [Role.USER]; 
 
     return user;
@@ -27,7 +28,7 @@ export class UserFactoryService {
     user.lastname = userDTO.lastname;
     user.email = userDTO.email;
     user.phone = userDTO.phone;
-    user.address = userDTO.address;
+    user.addresses = userDTO.addresses;
 
     return user;
   }

@@ -3,15 +3,19 @@ import { UserService } from './user.service';
 import { CreateUserDto, ReadUserDto, UpdateUserDto } from './dto/UserDTO';
 import { Types } from 'mongoose';
 import { ResponseMessage, TransformationInterceptor, ObjectIdNotFoundException, ObjectIdValidException } from 'src/middlewares';
+import { ValueMessage } from 'src/enum/value.enum';
+
 
 @UseInterceptors(TransformationInterceptor)
 @Controller('api/user')
 export class UserController {
-  constructor(private readonly _userService: UserService) { }
+  constructor(
+    private readonly _userService: UserService,
+  ) { }
 
   @Post()
   @ResponseMessage('User Create Succesfully')
-  create(@Body() userDto: CreateUserDto): Promise<ReadUserDto> {
+  async create(@Body() userDto: CreateUserDto): Promise<ReadUserDto> {
     return this._userService.create(userDto);
   }
 
@@ -29,9 +33,9 @@ export class UserController {
       if (user)
         return user;
       else
-        throw new ObjectIdNotFoundException(userId);
+        throw new ObjectIdNotFoundException(userId, ValueMessage.USER);
     }
-    throw new ObjectIdValidException(userId);
+    throw new ObjectIdValidException(userId, ValueMessage.USER);
   }
 
   @Patch(':id')
@@ -39,29 +43,30 @@ export class UserController {
   async update(@Param('id') userId: string, @Body() userDto: UpdateUserDto): Promise<any> {
     if (Types.ObjectId.isValid(userId)) {
       const user = await this._userService.findOne(userId);
-      if (user){
+      if (user) {
         return this._userService.update(userId, userDto);
       }
-      else{
-        throw new ObjectIdNotFoundException(userId);
+      else {
+        throw new ObjectIdNotFoundException(userId, ValueMessage.USER);
       }
     }
-    throw new ObjectIdValidException(userId);
-   
+    throw new ObjectIdValidException(userId, ValueMessage.USER);
+
   }
 
   @Delete(':id')
   @ResponseMessage('Delete User Succesfully')
-  async remove(@Param('id') userId: string){
+  async remove(@Param('id') userId: string) {
     if (Types.ObjectId.isValid(userId)) {
       const user = await this._userService.findOne(userId);
-      if (user){
+      if (user) {
         return this._userService.remove(userId);
       }
-      else{
-        throw new ObjectIdNotFoundException(userId);
+      else {
+        throw new ObjectIdNotFoundException(userId, ValueMessage.USER);
       }
     }
-    throw new ObjectIdValidException(userId);
+    throw new ObjectIdValidException(userId, ValueMessage.USER);
   }
+
 }
